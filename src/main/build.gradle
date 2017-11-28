@@ -1,0 +1,9 @@
+dependencies {
+    compile libs.logging_slf4j
+    compile libs.spring_boot
+
+    testCompile libs.test_festAssert
+    testCompile libs.test_testng
+    testCompile libs.test_unitils
+    testCompile libs.test_unitilsCore
+}

@@ -1,14 +1,29 @@
-group 'sean.test.groupip'
+group 'com.seantcanavan'
 version '1.0-SNAPSHOT'
 
-apply plugin: 'java'
 
-sourceCompatibility = 1.8
+allprojects {
 
-repositories {
-    mavenCentral()
+
+    apply plugin: 'java'
+
+    task wrapper(type: Wrapper) {
+        gradleVersion = '4.3.1'
+        distributionUrl = 'https://services.gradle.org/distributions/gradle-4.3.1-bin.zip'
+    }
+
+    apply from: "$rootDir/libs.gradle"
+
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+
+    test {
+        useTestNG()
+    }
 }
 
-dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+subprojects {
+    sourceCompatibility = 1.8
 }

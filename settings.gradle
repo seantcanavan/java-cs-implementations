@@ -1,2 +1,3 @@
-rootProject.name = 'sean.test.artifactid'
+rootProject.name = 'java-cs-implementations'
 
+include 'main'
