@@ -1,3 +1,5 @@
+import java.util.concurrent.TimeUnit
+
 apply plugin: 'java'
 apply plugin: 'application'
 apply plugin: 'idea'
@@ -16,9 +18,57 @@ targetCompatibility = 1.8
 dependencies {
     compile "joda-time:joda-time:2.2"
     testCompile "junit:junit:4.12"
+
+    testCompile "org.easytesting:fest-assert-core:2.0M10"
+    testCompile "org.testng:testng:6.13.1"
+    testCompile "org.uncommons:reportng:1.1.4"
 }
 
 jar {
     baseName = 'gs-gradle'
     version = '0.1.0'
+}
+
+//Setup the test task
+test {
+    useTestNG() {
+        //Here is where you can add listeners for testng and add the reporting for reportng
+        listeners << 'org.uncommons.reportng.HTMLReporter'
+        listeners << 'org.uncommons.reportng.JUnitXMLReporter'
+    }
+
+    //Disable the default groovy html reports since ReportNG is being used
+    reports.html.enabled = false
+
+    //Interceptors
+    beforeTest { desc ->
+        println "\n*** Starting execution of test ${desc.className}.${desc.name} ***"
+    }
+    afterTest { descriptor, result ->
+        println "<<< Test ${descriptor.name} resulted in ${result.resultType} and took "+getElaspedTime(result.endTime - result.startTime)+" >>>\n"
+    }
+
+    //Modify the test logging
+    testLogging {
+        showStandardStreams = true
+        exceptionFormat "full"
+    }
+}
+
+//Example of being able to use methods inside the build file
+def getElaspedTime(def time) {
+
+    if(time / 1000 < 1)
+    {
+        return String.format("0 min, %.3f sec", time/1000)
+    }
+    else
+    {
+        return String.format("%d min, %d sec",
+                TimeUnit.MILLISECONDS.toMinutes(time),
+                TimeUnit.MILLISECONDS.toSeconds(time) -
+                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(time))
+
+        )
+    }
 }
