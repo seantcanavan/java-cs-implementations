@@ -8,10 +8,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class GreeterTest {
+    private static final Logger LOG = LoggerFactory.getLogger(GreeterTest.class);
 
     private Greeter greeter = new Greeter();
-
-    private static final Logger LOG = LoggerFactory.getLogger(GreeterTest.class);
 
     @BeforeMethod(alwaysRun = true)
     public void reset() {
