@@ -1,29 +1,24 @@
-group 'com.seantcanavan'
-version '1.0-SNAPSHOT'
+apply plugin: 'java'
+apply plugin: 'application'
+apply plugin: 'idea'
 
+mainClassName = 'seantcanavan.HelloWorld'
 
-allprojects {
+//test.dependsOn 'cleanTest'
 
-
-    apply plugin: 'java'
-
-    task wrapper(type: Wrapper) {
-        gradleVersion = '4.3.1'
-        distributionUrl = 'https://services.gradle.org/distributions/gradle-4.3.1-bin.zip'
-    }
-
-    apply from: "$rootDir/libs.gradle"
-
-    repositories {
-        mavenCentral()
-        jcenter()
-    }
-
-    test {
-        useTestNG()
-    }
+repositories {
+    mavenCentral()
 }
 
-subprojects {
-    sourceCompatibility = 1.8
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencies {
+    compile "joda-time:joda-time:2.2"
+    testCompile "junit:junit:4.12"
+}
+
+jar {
+    baseName = 'gs-gradle'
+    version = '0.1.0'
 }
