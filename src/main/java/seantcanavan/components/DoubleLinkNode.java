@@ -1,50 +1,46 @@
 package seantcanavan.components;
 
 public class DoubleLinkNode<T extends Comparable<T>> extends Node<T> {
-    private DoubleLinkNode<T> one;
-    private DoubleLinkNode<T> two;
+    private DoubleLinkNode<T> left;
+    private DoubleLinkNode<T> right;
 
     public DoubleLinkNode(T data) { super(data); }
 
-    public DoubleLinkNode(T data, DoubleLinkNode<T> one, DoubleLinkNode<T> two) {
+    public DoubleLinkNode(T data, DoubleLinkNode<T> left, DoubleLinkNode<T> right) {
         super(data);
-        this.one = one;
-        this.two = two;
+        this.left = left;
+        this.right = right;
     }
 
     public T getData() { return data; }
 
     public void setData(T data) { this.data = data; }
 
-    public DoubleLinkNode<T> getOne() { return one; }
+    public DoubleLinkNode<T> getLeft() { return left; }
 
-    public void setOne(DoubleLinkNode<T> one) { this.one = one; }
+    public void setLeft(DoubleLinkNode<T> left) { this.left = left; }
 
-    public DoubleLinkNode<T> getTwo() { return two; }
+    public DoubleLinkNode<T> getRight() { return right; }
 
-    public void setTwo(DoubleLinkNode<T> two) { this.two = two; }
+    public void setRight(DoubleLinkNode<T> right) { this.right = right; }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        if (one != null) {
-            sb.append("[");
-            sb.append(one.toString());
-            sb.append("]");
+        if (left != null && left.getData() != null) {
+            sb.append(left.getData());
             sb.append(" <= ");
         }
 
-        sb.append("| ");
+        sb.append(" ");
         if (data != null) {
             sb.append(data.toString());
         }
-        sb.append(" |");
+        sb.append(" ");
 
-        if (two != null) {
+        if (right != null && right.getData() != null) {
             sb.append(" => ");
-            sb.append("[");
-            sb.append(two.toString());
-            sb.append("]");
+            sb.append(right.getData());
         }
 
         return sb.toString();

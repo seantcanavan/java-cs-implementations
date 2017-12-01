@@ -1,13 +1,13 @@
 package seantcanavan.components;
 
 public class SingleLinkNode<T extends Comparable<T>> extends Node<T> {
-    private SingleLinkNode<T> one;
+    private SingleLinkNode<T> next;
 
     public SingleLinkNode(T data) { super(data); }
 
-    public SingleLinkNode<T> getOne() { return one; }
+    public SingleLinkNode<T> getNext() { return next; }
 
-    public void setOne(SingleLinkNode<T> one) { this.one = one; }
+    public void setNext(SingleLinkNode<T> next) { this.next = next; }
 
     @Override
     public String toString() {
@@ -20,10 +20,10 @@ public class SingleLinkNode<T extends Comparable<T>> extends Node<T> {
         }
         sb.append(" |");
 
-        if (one != null) {
+        if (next != null) {
             sb.append(" => ");
             sb.append("[");
-            sb.append(one.toString());
+            sb.append(next.toString());
             sb.append("]");
         }
 
