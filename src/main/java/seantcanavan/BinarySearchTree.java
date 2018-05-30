@@ -84,8 +84,7 @@ public class BinarySearchTree<T extends Comparable<T>> {
         } else if (data.compareTo(current.getData()) > 0) {
             current.setRight(delete(current.getRight(), data));
         } else {
-
-            //tacke leaf and single node at the same time
+            //tackle leaf and single node at the same time
             if (current.getLeft() == null) {
                 return current.getRight();
             }else if (current.getRight() == null) {
