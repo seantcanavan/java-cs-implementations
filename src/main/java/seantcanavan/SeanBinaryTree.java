@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class BinarySearchTree<T extends Comparable<T>> {
+public class SeanBinaryTree<T extends Comparable<T>> {
 
     private DoubleLinkNode<T> root;
     private Order order;
@@ -19,9 +19,13 @@ public class BinarySearchTree<T extends Comparable<T>> {
         POST_ORDER,
     }
 
-    public BinarySearchTree() { this.order = Order.IN_ORDER; }
+    public SeanBinaryTree() {
+        this.order = Order.IN_ORDER;
+    }
 
-    public BinarySearchTree(Order order) { this.order = order; }
+    public SeanBinaryTree(Order order) {
+        this.order = order;
+    }
 
     public DoubleLinkNode<T> add(T data) {
         DoubleLinkNode<T> newNode = new DoubleLinkNode<T>(data);
@@ -40,7 +44,7 @@ public class BinarySearchTree<T extends Comparable<T>> {
                 } else {
                     current = current.getLeft();
                 }
-            } else if (current.getData().compareTo(data) < 0){
+            } else if (current.getData().compareTo(data) < 0) {
                 if (current.getRight() == null) {
                     current.setRight(newNode);
                     return newNode;
@@ -92,7 +96,7 @@ public class BinarySearchTree<T extends Comparable<T>> {
             //tackle leaf and single node at the same time
             if (current.getLeft() == null) {
                 return current.getRight();
-            }else if (current.getRight() == null) {
+            } else if (current.getRight() == null) {
                 return current.getLeft();
             } else {
                 DoubleLinkNode<T> replacement = findMax(current.getLeft());

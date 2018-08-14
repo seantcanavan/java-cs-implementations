@@ -1,35 +1,105 @@
 package seantcanavan;
 
+
+
+import org.junit.jupiter.api.Test;
+
+import java.util.LinkedList;
+import java.util.Random;
+
+import static org.fest.assertions.api.Assertions.assertThat;
+
 public class SeanBinaryTreeTest {
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		SeanBinaryTree<Integer> sbt = new SeanBinaryTree<Integer>();
-		sbt.add(50);
-		sbt.add(25);
-		sbt.add(75);
-		sbt.add(12);
-		sbt.add(37);
-		sbt.add(62);
-		sbt.add(87);
-		sbt.add(6);
-		sbt.add(18);
-		sbt.add(31);
-		sbt.add(43);
-		sbt.add(56);
-		sbt.add(68);
-		sbt.add(81);
-		sbt.add(93);
-		System.out.println(sbt.contains(20));
-		System.out.println(sbt.contains(87));
+    private final String subset = "1234567890";
+    private final int length = 5;
+    private final Random random = new Random();
 
-		sbt.printSelfBreadthFirst();
-		sbt.delete(50);
-		sbt.printSelfBreadthFirst();
-		sbt.delete(31);
-		sbt.printSelfBreadthFirst();
-		sbt.add(31);
-		sbt.add(50);
-		sbt.printSelfDepthFirstInOrder();
-	}
+    @Test
+    public void shouldAddManyValuesToTheTree() {
+        SeanBinaryTree<String> bst = new SeanBinaryTree<>();
+
+        for (int i = 0; i < 100000; i++) {
+            bst.add(randomStringGenerator(subset, length));
+        }
+
+        assertThat(bst.validTree()).isTrue();
+    }
+
+    @Test
+    public void shouldAddSameValueManyTimesCorrectly() {
+        SeanBinaryTree<String> bst = new SeanBinaryTree<>();
+
+        for (int i = 0; i < 5; i++) {
+            bst.add("s");
+        }
+
+        assertThat(bst.validTree()).isTrue();
+        assertThat(bst.find("s").getLeft()).isNull();
+        assertThat(bst.find("s").getRight()).isNull();
+    }
+
+    @Test()
+    public void shouldDeleteCorrectly() {
+        SeanBinaryTree<String> bst = new SeanBinaryTree<>();
+        LinkedList<String> inserted = new LinkedList<>();
+        int elements = 8;
+
+        for (int i = 0; i < elements; i++) {
+            String random = randomStringGenerator("12345", 3);
+            bst.add(random);
+            inserted.add(random);
+        }
+
+        bst.printBreadthFirst();
+
+        assertThat(bst.validTree()).isTrue();
+
+        for (int x = 0; x < elements - 3; x++) {
+            bst.delete(inserted.get(x));
+        }
+
+
+        bst.printBreadthFirst();
+        assertThat(bst.validTree()).isTrue();
+    }
+
+    @Test
+    public void shouldPerformManyRandomActions() {
+        SeanBinaryTree<String> bst = new SeanBinaryTree<>();
+        LinkedList<String> insertedValues = new LinkedList<>();
+
+        for (int i = 0; i < 100; i++) {
+            String random = randomStringGenerator(subset, length);
+            insertedValues.add(random);
+            bst.add(random);
+        }
+
+        for (int i = 0; i < 100; i++) {
+            if (randomOperation() == 0) {
+                String next = randomStringGenerator(subset, length);
+                insertedValues.add(next);
+                bst.add(next);
+            } else {
+                String toDelete = insertedValues.pop();
+                bst.delete(toDelete);
+            }
+        }
+
+        assertThat(bst.validTree()).isTrue();
+    }
+
+    private int randomOperation() {
+        return random.nextInt(2);
+    }
+
+
+    private String randomStringGenerator(String subset, int length) {
+        StringBuilder sb = new StringBuilder();
+        while (sb.length() < length) { // length of the random string.
+            int index = (int) (random.nextFloat() * subset.length());
+            sb.append(subset.charAt(index));
+        }
+        return sb.toString();
+    }
 }
