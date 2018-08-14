@@ -3,20 +3,25 @@ package seantcanavan;
 
 import seantcanavan.components.DoubleLinkNode;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class BinarySearchTree<T extends Comparable<T>> {
 
     private DoubleLinkNode<T> root;
-    private int order;
-    public static final int PRE_ORDER = 0;
-    public static final int IN_ORDER = 1;
-    public static final int POST_ORDER = 2;
+    private Order order;
 
-    public BinarySearchTree() { this.order = IN_ORDER; }
+    enum Order {
+        PRE_ORDER,
+        IN_ORDER,
+        POST_ORDER,
+    }
 
-    public BinarySearchTree(int order) { this.order = order; }
+    public BinarySearchTree() { this.order = Order.IN_ORDER; }
+
+    public BinarySearchTree(Order order) { this.order = order; }
 
     public DoubleLinkNode<T> add(T data) {
         DoubleLinkNode<T> newNode = new DoubleLinkNode<T>(data);
@@ -130,34 +135,39 @@ public class BinarySearchTree<T extends Comparable<T>> {
         }
     }
 
-    public void printDepthFirst() {
-        printDepthFirst(this.root);
+    public List<T> printDepthFirst() {
+        return printDepthFirst(this.root, new LinkedList<T>());
     }
 
-    private void printDepthFirst(DoubleLinkNode<T> root) {
+    private List<T> printDepthFirst(DoubleLinkNode<T> root, List<T> elements) {
         if (root == null) {
-            return;
+            return elements;
         }
 
-        if (order == PRE_ORDER) {
+        if (Order.PRE_ORDER.equals(this.order)) {
             System.out.println(root + "\n");
+            elements.add(root.getData());
         }
 
         if (root.getLeft() != null) {
-            printDepthFirst(root.getLeft());
+            printDepthFirst(root.getLeft(), elements);
         }
 
-        if (order == IN_ORDER) {
+        if (Order.IN_ORDER.equals(this.order)) {
             System.out.print(root + "\n");
+            elements.add(root.getData());
         }
 
         if (root.getRight() != null) {
-            printDepthFirst(root.getRight());
+            printDepthFirst(root.getRight(), elements);
         }
 
-        if (order == POST_ORDER) {
+        if (Order.POST_ORDER.equals(this.order)) {
             System.out.println(root + "\n");
+            elements.add(root.getData());
         }
+
+        return elements;
     }
 
     public boolean validTree() {
