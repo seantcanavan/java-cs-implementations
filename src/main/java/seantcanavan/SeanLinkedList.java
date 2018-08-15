@@ -3,6 +3,8 @@ package seantcanavan;
 import seantcanavan.components.DoubleLinkNode;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 public class SeanLinkedList<T extends Comparable<T>> implements Serializable {
@@ -10,46 +12,48 @@ public class SeanLinkedList<T extends Comparable<T>> implements Serializable {
   private static final long serialVersionUID = -3896129847029825570L;
   private DoubleLinkNode<T> first;
   private DoubleLinkNode<T> last;
-
   private int size;
 
-  public void add(T newElement) {
-    this.addLast(newElement);
+  public void add(T data) {
+    this.addLast(data);
   }
 
-  public void addFirst(T newElement) {
-    DoubleLinkNode<T> current = this.first;
-    this.first = new DoubleLinkNode<T>(newElement);
-    this.first.setRight(current);
+  public void addFirst(T data) {
+    DoubleLinkNode<T> newFirst = new DoubleLinkNode<>(data);
+    DoubleLinkNode<T> currentFirst = this.first;
 
-    if (this.size != 0) {
-      this.first.getRight().setLeft(this.first);
+    if (currentFirst == null) {
+      this.first = newFirst;
+      this.last = newFirst;
+    } else {
+      this.first = newFirst;
+      this.first.setRight(currentFirst);
+      currentFirst.setLeft(first);
     }
 
-    if (this.size == 0) {
-      this.last = this.first;
-    }
-
-    this.size += 1;
+    this.size++;
   }
 
-  public void addLast(T newElement) {
-    DoubleLinkNode<T> newNode = new DoubleLinkNode<>(newElement);
-    this.last.setRight(newNode);
-    newNode.setLeft(this.last);
-    this.last = newNode;
+  public void addLast(T data) {
+    DoubleLinkNode<T> newLast = new DoubleLinkNode<>(data);
+    DoubleLinkNode<T> currentLast = last;
 
-    if (this.size == 0) {
-      this.first = newNode;
+    if (currentLast == null) {
+      this.first = newLast;
+      this.last = newLast;
+    } else {
+      currentLast.setRight(newLast);
+      newLast.setLeft(currentLast);
+      this.last = newLast;
     }
 
-    this.size += 1;
+    this.size++;
   }
 
   public void clear() {
     this.first = null;
     this.last = null;
-    this.size = -1;
+    this.size = 0;
   }
 
   public boolean contains(T value) {
@@ -70,7 +74,7 @@ public class SeanLinkedList<T extends Comparable<T>> implements Serializable {
     int traversed = 0;
 
     if (portion >= .50) {
-      int position = this.size - index;
+      int position = this.size - 1 - index;
       current = this.last;
       for (int x = 0; x < position; x++) {
         current = current.getLeft();
@@ -104,15 +108,26 @@ public class SeanLinkedList<T extends Comparable<T>> implements Serializable {
   }
 
   public int indexOf(Object value) {
-    if (this.first == null) return -1;
+
+    if (value == null) {
+      return -1;
+    }
+
+    if (this.first == null) {
+      return -1;
+    }
 
     DoubleLinkNode<T> current = this.first;
     int position = 0;
-    do {
-      if (value.equals(current.getData())) return position;
-      position += 1;
+    while (current != null) {
+      if (value.equals(current.getData())) {
+        return position;
+      }
+      position++;
       current = current.getRight();
-    } while (current.getRight() != null);
+    }
+
+    // not found
     return -1;
   }
 
@@ -134,42 +149,81 @@ public class SeanLinkedList<T extends Comparable<T>> implements Serializable {
     } else System.out.println("list is empty");
   }
 
-  public boolean remove(Object oldValue) {
+  public boolean remove(T value) {
+    if (this.first == null) {
+      throw new NoSuchElementException("Can't remove from an empty list");
+    }
+
     DoubleLinkNode<T> current = this.first;
-    while (current != null) {
-      if (oldValue.equals(current.getData())) {
-        current.getLeft().setRight(current.getRight());
-        current.getRight().setLeft(current.getLeft());
-        current.setRight(null);
-        current.setLeft(null);
-        this.size -= 1;
-        return true;
+
+    while (!current.getData().equals(value)) {
+      if (current.getRight() == null) {
+        return false;
       }
+
       current = current.getRight();
     }
-    return false;
+
+    if (this.size == 1) {
+      this.clear();
+    } else if (this.size == 2) {
+      if (current.equals(this.first)) {
+        this.first = last;
+        this.first.setLeft(null);
+        this.first.setRight(null);
+      } else {
+        this.last = first;
+        this.last.setLeft(null);
+        this.last.setRight(null);
+      }
+      this.size = 1;
+    } else {
+      DoubleLinkNode<T> leftLink = current.getLeft();
+      DoubleLinkNode<T> rightLink = current.getRight();
+
+      leftLink.setRight(rightLink);
+      rightLink.setLeft(leftLink);
+      this.size--;
+    }
+
+    return true;
   }
 
   public T removeFirst() throws NoSuchElementException {
-    if (this.size == 0) throw new NoSuchElementException("list is empty, can't remove first");
+    if (size == 0) {
+      throw new NoSuchElementException("Can't remove first element when list is empty.");
+    } else if (size == 1) {
+      T data = this.last.getData();
+      this.clear();
+      return data;
+    }
 
-    T returnThis = this.first.getData();
-    this.first = this.first.getLeft();
+    T data = this.first.getData();
+
+    this.first = this.first.getRight();
     this.first.setLeft(null);
-    this.size -= 1;
-    return returnThis;
+
+    this.size--;
+    return data;
   }
 
   public T removeLast() throws NoSuchElementException {
-    if (this.size == 0) throw new NoSuchElementException("list is empty, can't remove last");
+    if (size == 0) {
+      throw new NoSuchElementException("Can't remove last element when list is empty.");
+    } else if (size == 1) {
+      T data = this.first.getData();
+      this.clear();
+      return data;
+    }
 
-    DoubleLinkNode<T> lastElement = this.last;
-    this.last = this.last.getLeft();
-    this.last.setRight(null);
-    lastElement.setLeft(null);
-    lastElement.setRight(null);
-    this.size -= 1;
-    return lastElement.getData();
+    T data = this.last.getData();
+
+    DoubleLinkNode<T> newLast = this.last.getLeft();
+    newLast.setRight(null);
+    this.last = newLast;
+
+    this.size--;
+    return data;
   }
 
   public void reverse() {
@@ -193,7 +247,51 @@ public class SeanLinkedList<T extends Comparable<T>> implements Serializable {
     this.first = oldLast;
   }
 
-  public int size() {
-    return this.size;
+  public List<T> toList() {
+    List<T> list = new ArrayList<>();
+    DoubleLinkNode<T> current = this.first;
+    while (current != null) {
+      list.add(current.getData());
+      current = current.getRight();
+    }
+
+    return list;
+  }
+
+  public int getSize() {
+    return size;
+  }
+
+  /**
+   * Requires equals override on T
+   */
+  public boolean isValid() {
+    if (first == null) {
+      return true;
+    }
+
+    int traversed = 1;
+    DoubleLinkNode<T> current = first;
+    DoubleLinkNode<T> next = current.getRight();
+
+    while (next != null) {
+      if (!current.getRight().equals(next)) {
+        return false;
+      }
+
+      if (!current.getRight().getLeft().equals(current)) {
+        return false;
+      }
+
+      current = next;
+      next = current.getRight();
+      traversed++;
+    }
+
+    if (!current.equals(this.last)) {
+      return false;
+    }
+
+    return traversed == size;
   }
 }

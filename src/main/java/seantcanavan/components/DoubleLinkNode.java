@@ -1,5 +1,7 @@
 package seantcanavan.components;
 
+import java.util.Objects;
+
 public class DoubleLinkNode<T extends Comparable<T>> {
   private DoubleLinkNode<T> left;
   private DoubleLinkNode<T> right;
@@ -59,5 +61,20 @@ public class DoubleLinkNode<T extends Comparable<T>> {
     }
 
     return sb.toString();
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    DoubleLinkNode<?> that = (DoubleLinkNode<?>) o;
+    return Objects.equals(left, that.left) &&
+            Objects.equals(right, that.right) &&
+            Objects.equals(data, that.data);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(left, right, data);
   }
 }
