@@ -42,7 +42,7 @@ public class SeanLinkedList<E> implements Serializable {
 
   public void addFirst(E newElement) {
     Node<E> current = this.first;
-    this.first = new Node<E>(newElement);
+    this.first = new Node<>(newElement);
     this.first.next = current;
     if (this.size != 0) this.first.next.prev = this.first;
     if (this.size == 0) this.last = this.first;
@@ -50,7 +50,7 @@ public class SeanLinkedList<E> implements Serializable {
   }
 
   public void addLast(E newElement) {
-    Node<E> newNode = new Node<E>(newElement);
+    Node<E> newNode = new Node<>(newElement);
     this.last.next = newNode;
     newNode.prev = this.last;
     this.last = newNode;
@@ -66,8 +66,7 @@ public class SeanLinkedList<E> implements Serializable {
 
   public boolean contains(E value) {
     if (value == null) return false;
-    if (this.indexOf(value) == -1) return false;
-    return true;
+    return this.indexOf(value) != -1;
   }
 
   public E get(int index) throws IndexOutOfBoundsException {
@@ -86,9 +85,8 @@ public class SeanLinkedList<E> implements Serializable {
         traversed++;
       }
     } else {
-      int position = index;
       current = this.first;
-      for (int x = 0; x < position; x++) {
+      for (int x = 0; x < index; x++) {
         current = current.next;
         traversed++;
       }

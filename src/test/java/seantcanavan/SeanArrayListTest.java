@@ -187,16 +187,16 @@ public class SeanArrayListTest {
     List<Integer> primeNumberList =
         Lists.newArrayList(2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41);
 
-    Integer remove1 = 17;
+    int remove1 = 17;
     List<Integer> result1 = Lists.newArrayList(2, 3, 5, 7, 11, 13, 19, 23, 29, 31, 37, 41);
 
-    Integer remove2 = 41;
+    int remove2 = 41;
     List<Integer> result2 = Lists.newArrayList(2, 3, 5, 7, 11, 13, 19, 23, 29, 31, 37);
 
-    Integer remove3 = 2;
+    int remove3 = 2;
     List<Integer> result3 = Lists.newArrayList(3, 5, 7, 11, 13, 19, 23, 29, 31, 37);
 
-    Integer remove4 = 5;
+    int remove4 = 5;
     List<Integer> result4 = Lists.newArrayList(3, 7, 11, 13, 19, 23, 29, 31, 37);
 
     for (Integer currentPrime : primeNumberList) {

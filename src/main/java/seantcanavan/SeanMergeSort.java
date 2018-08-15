@@ -38,8 +38,8 @@ public class SeanMergeSort {
   public void mergeSort(List<Integer> values) {
     if (values.size() < 2) return;
     int middle = values.size() / 2;
-    List<Integer> left = new ArrayList<Integer>();
-    List<Integer> right = new ArrayList<Integer>();
+    List<Integer> left = new ArrayList<>();
+    List<Integer> right = new ArrayList<>();
     for (int x = 0; x < middle; x++) left.add(values.get(x));
     for (int y = middle; y < values.size(); y++) right.add(values.get(y));
     this.mergeSort(left);

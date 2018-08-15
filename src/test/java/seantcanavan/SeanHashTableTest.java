@@ -7,7 +7,9 @@ import java.util.Scanner;
 public class SeanHashTableTest {
 
   @Test
-  public void Should_Test() {}
+  public void Should_Test() {
+
+  }
 
   public static void main(String[] args) {
     Scanner scan = new Scanner(System.in);
@@ -28,7 +30,7 @@ public class SeanHashTableTest {
         case 1:
           System.out.println("Enter key");
           String insertKey = scan.next();
-          System.out.println("Ente value");
+          System.out.println("Enter value");
           String insertValue = scan.next();
           sht.insert(insertKey, insertValue);
           break;

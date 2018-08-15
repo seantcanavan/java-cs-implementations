@@ -18,23 +18,21 @@ class SeanHashTable {
 
     @Override
     public String toString() {
-      StringBuilder returnThis = new StringBuilder();
-      returnThis.append("key: ");
-      returnThis.append(key);
-      returnThis.append("  ");
-      returnThis.append("value: ");
-      returnThis.append(value);
-      return returnThis.toString();
+      return "key: " +
+              key +
+              "  " +
+              "value: " +
+              value;
     }
   }
 
   private final int ARRAY_LIST_SIZE = 25;
   private int size;
 
-  private ArrayList<LinkedList<HashValue>> table = new ArrayList<LinkedList<HashValue>>();
+  private ArrayList<LinkedList<HashValue>> table = new ArrayList<>();
 
   public SeanHashTable() {
-    for (int x = 0; x < ARRAY_LIST_SIZE; x++) table.add(new LinkedList<HashValue>());
+    for (int x = 0; x < ARRAY_LIST_SIZE; x++) table.add(new LinkedList<>());
     this.size = 0;
   }
 
@@ -44,7 +42,7 @@ class SeanHashTable {
   }
 
   private String flattenLinkedList(LinkedList<HashValue> list) {
-    StringBuffer returnThis = new StringBuffer();
+    StringBuilder returnThis = new StringBuilder();
     returnThis.append("list: ");
     for (HashValue currentValue : list) {
       returnThis.append(currentValue.toString());
@@ -54,7 +52,7 @@ class SeanHashTable {
   }
 
   public String get(String key) {
-    int hash = (myhash(key) % this.ARRAY_LIST_SIZE);
+    int hash = (calculateHash(key) % this.ARRAY_LIST_SIZE);
     LinkedList<HashValue> currentList = this.table.get(hash);
     if (currentList.size() == 0) return null;
 
@@ -72,7 +70,7 @@ class SeanHashTable {
 
   public void insert(String key, String value) {
     HashValue newValue = new HashValue(key, value);
-    int hash = (myhash(key) % this.ARRAY_LIST_SIZE);
+    int hash = (calculateHash(key) % this.ARRAY_LIST_SIZE);
     LinkedList<HashValue> currentList = this.table.get(hash);
     Iterator<HashValue> currentIterator = currentList.iterator();
     boolean found = false;
@@ -91,7 +89,7 @@ class SeanHashTable {
     }
   }
 
-  private int myhash(String x) {
+  private int calculateHash(String x) {
     int hashVal = x.hashCode();
     hashVal %= this.ARRAY_LIST_SIZE;
     if (hashVal < 0) hashVal += this.ARRAY_LIST_SIZE;
@@ -105,7 +103,7 @@ class SeanHashTable {
   }
 
   public boolean remove(String key) {
-    int hash = (myhash(key) % this.ARRAY_LIST_SIZE);
+    int hash = (calculateHash(key) % this.ARRAY_LIST_SIZE);
     LinkedList<HashValue> currentList = this.table.get(hash);
     if (currentList.size() == 0) return false;
     Iterator<HashValue> currentIterator = currentList.iterator();

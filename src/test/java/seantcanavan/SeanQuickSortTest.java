@@ -8,7 +8,7 @@ public class SeanQuickSortTest {
 
   @Test
   public void Should_Test() {
-    ArrayList<Integer> unsortedList = new ArrayList<Integer>();
+    ArrayList<Integer> unsortedList = new ArrayList<>();
     unsortedList.add(3);
     unsortedList.add(4);
     unsortedList.add(7);

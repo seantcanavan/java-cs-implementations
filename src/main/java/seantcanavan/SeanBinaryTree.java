@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class SeanBinaryTree<T extends Comparable<T>> {
 
   private DoubleLinkNode<T> root;
-  private Order order;
+  private final Order order;
 
   enum Order {
     PRE_ORDER,
@@ -27,7 +27,7 @@ public class SeanBinaryTree<T extends Comparable<T>> {
   }
 
   public DoubleLinkNode<T> add(T data) {
-    DoubleLinkNode<T> newNode = new DoubleLinkNode<T>(data);
+    DoubleLinkNode<T> newNode = new DoubleLinkNode<>(data);
 
     if (root == null) {
       root = newNode;
@@ -139,7 +139,7 @@ public class SeanBinaryTree<T extends Comparable<T>> {
   }
 
   public List<T> printDepthFirst() {
-    return printDepthFirst(this.root, new LinkedList<T>());
+    return printDepthFirst(this.root, new LinkedList<>());
   }
 
   private List<T> printDepthFirst(DoubleLinkNode<T> root, List<T> elements) {

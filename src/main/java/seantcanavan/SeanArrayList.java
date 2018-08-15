@@ -48,9 +48,9 @@ public class SeanArrayList<T> {
     this.ensureCapacity();
 
     // start from the back and move every element to the right once
-    for (int i = size; i > index; i--) {
-      list[i] = list[i - 1];
-    }
+      if (size - index >= 0) {
+          System.arraycopy(list, index, list, index + 1, size - index);
+      }
 
     // insert the value in the new space
     list[index] = value;
@@ -79,9 +79,9 @@ public class SeanArrayList<T> {
     }
 
     // override everything over one value from the right
-    for (int i = index; i < size - 1; i++) {
-      list[i] = list[i + 1];
-    }
+      if (size - 1 - index >= 0) {
+          System.arraycopy(list, index + 1, list, index, size - 1 - index);
+      }
 
     // this covers the case where it's the last value in the list
     list[size - 1] = null;
