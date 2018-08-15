@@ -2,14 +2,12 @@ package seantcanavan;
 
 import seantcanavan.components.DoubleLinkNode;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-public class SeanLinkedList<T extends Comparable<T>> implements Serializable {
+public class SeanLinkedList<T extends Comparable<T>> {
 
-  private static final long serialVersionUID = -3896129847029825570L;
   private DoubleLinkNode<T> first;
   private DoubleLinkNode<T> last;
   private int size;
