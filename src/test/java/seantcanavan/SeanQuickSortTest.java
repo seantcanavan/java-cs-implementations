@@ -3,12 +3,13 @@ package seantcanavan;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SeanQuickSortTest {
 
   @Test
   public void Quicksort_WithStandardSetOfValues_ShouldReturnListInSortedOrder() {
-    ArrayList<Integer> unsortedList = new ArrayList<>();
+    List<Integer> unsortedList = new ArrayList<>();
     unsortedList.add(3);
     unsortedList.add(4);
     unsortedList.add(7);
@@ -19,15 +20,10 @@ public class SeanQuickSortTest {
     unsortedList.add(9);
     unsortedList.add(8);
     unsortedList.add(0);
-    SeanQuickSort qs = new SeanQuickSort(true);
-    qs.quickSort(unsortedList, 0, unsortedList.size() - 1);
-    System.out.println(qs.printList(unsortedList));
-
-    qs = new SeanQuickSort(false);
-    qs.quickSort(unsortedList, 0, unsortedList.size() - 1);
-    System.out.println(qs.printList(unsortedList));
-  }
+    SeanQuickSort<Integer> qs = new SeanQuickSort<>();
+//    qs.quickSort(unsortedList);
 //
-//  @Test
-//  public void
+//    qs = new SeanQuickSort<>();
+//    qs.quickSort(unsortedList);
+  }
 }
