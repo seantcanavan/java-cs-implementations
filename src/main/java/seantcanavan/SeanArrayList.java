@@ -2,7 +2,7 @@ package seantcanavan;
 
 import java.util.Collection;
 
-public class SeanArrayList<T extends Comparable> {
+public class SeanArrayList<T> {
   public static final int DEFAULT_CAPACITY = 10;
   public static final int GROWTH_RATE = 2;
   public static final int SHRINK_RATE = 3;
@@ -57,9 +57,40 @@ public class SeanArrayList<T extends Comparable> {
     this.size++;
   }
 
-  public void remove(T value) {}
+  public int remove(T value) {
 
-  public void removeAt(int index) {}
+    if (value == null) {
+      return -1;
+    }
+
+    for (int i = 0; i < size; i++) {
+      if (list[i].equals(value)) {
+        return remove(i);
+      }
+    }
+
+    return -1;
+  }
+
+  public int remove(int index) {
+
+    if (index < 0) {
+      throw new IllegalArgumentException("Can't delete at negative index.");
+    }
+
+    // override everything over one value from the right
+    for (int i = index; i < size - 1; i++) {
+      list[i] = list[i + 1];
+    }
+
+    // this covers the case where it's the last value in the list
+    list[size - 1] = null;
+
+    size--;
+    shrinkCapacity();
+
+    return index;
+  }
 
   @SuppressWarnings("unchecked")
   public T get(int index) {
@@ -80,7 +111,28 @@ public class SeanArrayList<T extends Comparable> {
     list = newArray;
   }
 
-  private void shrinkCapacity() {}
+  private void shrinkCapacity() {
+    double percentFull = (double) size / (double) list.length * 100;
+    // if we're still over one third full - do not shrink
+    if (percentFull > 33.0) {
+      return;
+    }
+
+    // do not shrink past the minimum
+    // this prevents resizing frequently after repeatedly calling remove on a small list
+    if (list.length == SeanArrayList.DEFAULT_CAPACITY) {
+      return;
+    }
+
+    // if we are under the default capacity then resize to the default capacity
+    // otherwise shrink to the current size + the default
+    // this prevents shrinking then immediately increasing if an add is performed right after
+    int newCapacity = size < DEFAULT_CAPACITY ? DEFAULT_CAPACITY : size + DEFAULT_CAPACITY;
+
+    Object[] newArray = new Object[newCapacity];
+    System.arraycopy(list, 0, newArray, 0, size);
+    list = newArray;
+  }
 
   public int getSize() {
     return size;
