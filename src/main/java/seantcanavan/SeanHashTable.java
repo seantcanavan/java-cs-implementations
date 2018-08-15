@@ -1,31 +1,12 @@
 package seantcanavan;
 
+import seantcanavan.components.HashValue;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 
 class SeanHashTable {
-  private static class HashValue {
-    private String key;
-    private String value;
-
-    public HashValue(String key, String value) {
-      if (key == null || value == null)
-        throw new IllegalArgumentException("no null values allowed");
-      this.key = key;
-      this.value = value;
-    }
-
-    @Override
-    public String toString() {
-      return "key: " +
-              key +
-              "  " +
-              "value: " +
-              value;
-    }
-  }
-
   private final int ARRAY_LIST_SIZE = 25;
   private int size;
 
@@ -59,7 +40,7 @@ class SeanHashTable {
     Iterator<HashValue> currentIterator = currentList.iterator();
     while ((currentIterator.hasNext())) {
       HashValue currentElement = currentIterator.next();
-      if (currentElement.key.compareTo(key) == 0) return currentElement.value;
+      if (currentElement.getKey().compareTo(key) == 0) return currentElement.getValue();
     }
     return null;
   }
@@ -76,8 +57,8 @@ class SeanHashTable {
     boolean found = false;
     while (currentIterator.hasNext()) {
       HashValue currentElement = currentIterator.next();
-      if (currentElement.key.compareTo(key) == 0) {
-        currentElement.value = value;
+      if (currentElement.getKey().compareTo(key) == 0) {
+        currentElement.setValue(value);
         found = true;
         break;
       }
@@ -110,7 +91,7 @@ class SeanHashTable {
     int index = 0; // prevents currentList.getIndex() call to avoid n^2 loop
     while (currentIterator.hasNext()) {
       HashValue currentValue = currentIterator.next();
-      if (currentValue.key.compareTo(key) == 0) {
+      if (currentValue.getKey().compareTo(key) == 0) {
         currentList.remove(index);
         this.size--;
         return true;

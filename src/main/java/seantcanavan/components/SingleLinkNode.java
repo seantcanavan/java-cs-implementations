@@ -1,10 +1,16 @@
 package seantcanavan.components;
 
-public class SingleLinkNode<T extends Comparable<T>> extends Node<T> {
+public class SingleLinkNode<T extends Comparable<T>> {
+  private T data;
   private SingleLinkNode<T> next;
 
   public SingleLinkNode(T data) {
-    super(data);
+    this.data = data;
+  }
+
+  public SingleLinkNode(T data, SingleLinkNode<T> next) {
+    this.data = data;
+    this.next = next;
   }
 
   public SingleLinkNode<T> getNext() {

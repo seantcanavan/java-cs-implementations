@@ -1,60 +1,48 @@
 package seantcanavan;
 
+import seantcanavan.components.DoubleLinkNode;
+
 import java.io.Serializable;
 import java.util.NoSuchElementException;
 
-public class SeanLinkedList<E> implements Serializable {
-
-  private static class Node<E> {
-    public E data;
-
-    public Node<E> next;
-    public Node<E> prev;
-
-    public Node(E data) {
-      this.data = data;
-    }
-
-    @Override
-    public String toString() {
-      StringBuilder returnThis = new StringBuilder();
-      if (this.prev == null) returnThis.append("begin");
-      else returnThis.append(this.prev.data);
-
-      returnThis.append(" <- ");
-      returnThis.append(this.data);
-      returnThis.append(" -> ");
-      if (this.next == null) returnThis.append("end");
-      else returnThis.append(this.next.data);
-      return returnThis.toString();
-    }
-  }
+public class SeanLinkedList<T extends Comparable<T>> implements Serializable {
 
   private static final long serialVersionUID = -3896129847029825570L;
-  private Node<E> first;
-  private Node<E> last;
+  private DoubleLinkNode<T> first;
+  private DoubleLinkNode<T> last;
 
   private int size;
 
-  public void add(E newElement) {
+  public void add(T newElement) {
     this.addLast(newElement);
   }
 
-  public void addFirst(E newElement) {
-    Node<E> current = this.first;
-    this.first = new Node<>(newElement);
-    this.first.next = current;
-    if (this.size != 0) this.first.next.prev = this.first;
-    if (this.size == 0) this.last = this.first;
+  public void addFirst(T newElement) {
+    DoubleLinkNode<T> current = this.first;
+    this.first = new DoubleLinkNode<T>(newElement);
+    this.first.setRight(current);
+
+    if (this.size != 0) {
+      this.first.getRight().setLeft(this.first);
+    }
+
+    if (this.size == 0) {
+      this.last = this.first;
+    }
+
     this.size += 1;
   }
 
-  public void addLast(E newElement) {
-    Node<E> newNode = new Node<>(newElement);
-    this.last.next = newNode;
-    newNode.prev = this.last;
+  public void addLast(T newElement) {
+    DoubleLinkNode<T> newNode = new DoubleLinkNode<>(newElement);
+    this.last.setRight(newNode);
+    newNode.setLeft(this.last);
     this.last = newNode;
-    if (this.size == 0) this.first = newNode;
+
+    if (this.size == 0) {
+      this.first = newNode;
+    }
+
     this.size += 1;
   }
 
@@ -64,57 +52,67 @@ public class SeanLinkedList<E> implements Serializable {
     this.size = -1;
   }
 
-  public boolean contains(E value) {
-    if (value == null) return false;
+  public boolean contains(T value) {
+    if (value == null) {
+      return false;
+    }
+
     return this.indexOf(value) != -1;
   }
 
-  public E get(int index) throws IndexOutOfBoundsException {
-    if (index < 0 || index >= size)
+  public T get(int index) throws IndexOutOfBoundsException {
+    if (index < 0 || index >= size) {
       throw new IndexOutOfBoundsException("List does not have an element at position: " + index);
+    }
 
     double portion = ((double) index / (double) this.size);
-    Node<E> current;
+    DoubleLinkNode<T> current;
     int traversed = 0;
 
     if (portion >= .50) {
       int position = this.size - index;
       current = this.last;
       for (int x = 0; x < position; x++) {
-        current = current.prev;
+        current = current.getLeft();
         traversed++;
       }
     } else {
       current = this.first;
       for (int x = 0; x < index; x++) {
-        current = current.next;
+        current = current.getRight();
         traversed++;
       }
     }
     System.out.println("traversed: " + traversed);
-    return current.data;
+    return current.getData();
   }
 
-  public E getFirst() throws NoSuchElementException {
-    if (this.first == null) throw new NoSuchElementException("The list is not initialized");
-    return first.data;
+  public T getFirst() throws NoSuchElementException {
+    if (this.first == null) {
+      throw new NoSuchElementException("The list is not initialized");
+    }
+
+    return first.getData();
   }
 
-  public E getLast() throws NoSuchElementException {
-    if (this.first == null) throw new NoSuchElementException("The list is not initialized");
-    return this.last.data;
+  public T getLast() throws NoSuchElementException {
+    if (this.first == null) {
+      throw new NoSuchElementException("The list is not initialized");
+    }
+
+    return this.last.getData();
   }
 
   public int indexOf(Object value) {
     if (this.first == null) return -1;
 
-    Node<E> current = this.first;
+    DoubleLinkNode<T> current = this.first;
     int position = 0;
     do {
-      if (value.equals(current.data)) return position;
+      if (value.equals(current.getData())) return position;
       position += 1;
-      current = current.next;
-    } while (current.next != null);
+      current = current.getRight();
+    } while (current.getRight() != null);
     return -1;
   }
 
@@ -125,68 +123,68 @@ public class SeanLinkedList<E> implements Serializable {
   public void printSelf() {
     if (this.size != 0) {
       System.out.println("size: " + this.size);
-      System.out.println("first: " + this.first.data);
-      System.out.println("last: " + this.last.data);
-      Node<E> current = this.first;
-      while (current.next != null) {
+      System.out.println("first: " + this.first.getData());
+      System.out.println("last: " + this.last.getData());
+      DoubleLinkNode<T> current = this.first;
+      while (current.getRight() != null) {
         System.out.println(current.toString());
-        current = current.next;
+        current = current.getRight();
       }
       System.out.println(current);
     } else System.out.println("list is empty");
   }
 
   public boolean remove(Object oldValue) {
-    Node<E> current = this.first;
+    DoubleLinkNode<T> current = this.first;
     while (current != null) {
-      if (oldValue.equals(current.data)) {
-        current.prev.next = current.next;
-        current.next.prev = current.prev;
-        current.next = null;
-        current.prev = null;
+      if (oldValue.equals(current.getData())) {
+        current.getLeft().setRight(current.getRight());
+        current.getRight().setLeft(current.getLeft());
+        current.setRight(null);
+        current.setLeft(null);
         this.size -= 1;
         return true;
       }
-      current = current.next;
+      current = current.getRight();
     }
     return false;
   }
 
-  public E removeFirst() throws NoSuchElementException {
+  public T removeFirst() throws NoSuchElementException {
     if (this.size == 0) throw new NoSuchElementException("list is empty, can't remove first");
 
-    E returnThis = this.first.data;
-    this.first = this.first.next;
-    this.first.prev = null;
+    T returnThis = this.first.getData();
+    this.first = this.first.getLeft();
+    this.first.setLeft(null);
     this.size -= 1;
     return returnThis;
   }
 
-  public E removeLast() throws NoSuchElementException {
+  public T removeLast() throws NoSuchElementException {
     if (this.size == 0) throw new NoSuchElementException("list is empty, can't remove last");
 
-    Node<E> lastElement = this.last;
-    this.last = this.last.prev;
-    this.last.next = null;
-    lastElement.prev = null;
-    lastElement.next = null;
+    DoubleLinkNode<T> lastElement = this.last;
+    this.last = this.last.getLeft();
+    this.last.setRight(null);
+    lastElement.setLeft(null);
+    lastElement.setRight(null);
     this.size -= 1;
-    return lastElement.data;
+    return lastElement.getData();
   }
 
   public void reverse() {
-    Node<E> oldFirst = this.first;
-    Node<E> oldLast = this.last;
-    Node<E> current = this.first;
+    DoubleLinkNode<T> oldFirst = this.first;
+    DoubleLinkNode<T> oldLast = this.last;
+    DoubleLinkNode<T> current = this.first;
 
     for (int x = 0; x < this.size; x++) {
-      Node<E> next = current.next;
+      DoubleLinkNode<T> next = current.getRight();
 
-      Node<E> curNext = current.next;
-      Node<E> curPrev = current.prev;
+      DoubleLinkNode<T> curNext = current.getRight();
+      DoubleLinkNode<T> curPrev = current.getLeft();
 
-      current.prev = curNext;
-      current.next = curPrev;
+      current.setLeft(curNext);
+      current.setRight(curPrev);
 
       current = next;
     }

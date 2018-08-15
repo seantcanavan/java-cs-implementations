@@ -1,15 +1,16 @@
 package seantcanavan.components;
 
-public class DoubleLinkNode<T extends Comparable<T>> extends Node<T> {
+public class DoubleLinkNode<T extends Comparable<T>> {
   private DoubleLinkNode<T> left;
   private DoubleLinkNode<T> right;
+  private T data;
 
   public DoubleLinkNode(T data) {
-    super(data);
+    this.data = data;
   }
 
   public DoubleLinkNode(T data, DoubleLinkNode<T> left, DoubleLinkNode<T> right) {
-    super(data);
+    this.data = data;
     this.left = left;
     this.right = right;
   }
