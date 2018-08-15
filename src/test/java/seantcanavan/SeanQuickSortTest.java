@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class SeanQuickSortTest {
 
   @Test
-  public void Should_Test() {
+  public void Quicksort_WithStandardSetOfValues_ShouldReturnListInSortedOrder() {
     ArrayList<Integer> unsortedList = new ArrayList<>();
     unsortedList.add(3);
     unsortedList.add(4);
@@ -21,6 +21,13 @@ public class SeanQuickSortTest {
     unsortedList.add(0);
     SeanQuickSort qs = new SeanQuickSort(true);
     qs.quickSort(unsortedList, 0, unsortedList.size() - 1);
-    for (Integer currentInteger : unsortedList) System.out.println(currentInteger.toString());
+    System.out.println(qs.printList(unsortedList));
+
+    qs = new SeanQuickSort(false);
+    qs.quickSort(unsortedList, 0, unsortedList.size() - 1);
+    System.out.println(qs.printList(unsortedList));
   }
+//
+//  @Test
+//  public void
 }

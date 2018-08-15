@@ -3,7 +3,7 @@ package seantcanavan;
 import java.util.List;
 import java.util.Random;
 
-public class SeanQuickSort {
+public class SeanQuickSort<T extends Comparable<T>> {
 
   private boolean increasing;
 
@@ -11,19 +11,19 @@ public class SeanQuickSort {
     this.increasing = increasing;
   }
 
-  public String printList(List<Integer> inputList) {
+  public String printList(List<T> inputList) {
     StringBuilder sb = new StringBuilder();
 
-    for (Integer currentInteger : inputList) {
+    for (T currentValue : inputList) {
       sb.append("\t");
-      sb.append(currentInteger.toString());
+      sb.append(currentValue.toString());
       sb.append("\t");
     }
 
     return sb.toString();
   }
 
-  private int partitionList(List<Integer> values, int start, int end) {
+  private int partitionList(List<T> values, int start, int end) {
     Random pivotGenerator =
         new Random(System.currentTimeMillis()); // seed a new random number generator
 
@@ -38,7 +38,7 @@ public class SeanQuickSort {
 
     this.swapValues(values, randomPivotIndex, end); // swap the random value to the end
 
-    Integer pivotValue = values.get(end);
+    T pivotValue = values.get(end);
     System.out.print("pivotValue: " + pivotValue + "\t");
     int partitionPosition = start;
 
@@ -54,7 +54,7 @@ public class SeanQuickSort {
     return partitionPosition;
   }
 
-  public void quickSort(List<Integer> values, int start, int end) {
+  public void quickSort(List<T> values, int start, int end) {
     if (start < end) {
       int pivotIndex = this.partitionList(values, start, end);
       this.quickSort(values, start, pivotIndex - 1);
@@ -62,9 +62,9 @@ public class SeanQuickSort {
     }
   }
 
-  private void swapValues(List<Integer> values, int firstIndex, int secondIndex) {
-    Integer firstValue = values.get(firstIndex);
-    Integer secondValue = values.get(secondIndex);
+  private void swapValues(List<T> values, int firstIndex, int secondIndex) {
+    T firstValue = values.get(firstIndex);
+    T secondValue = values.get(secondIndex);
 
     values.set(firstIndex, secondValue);
     values.set(secondIndex, firstValue);
