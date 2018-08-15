@@ -35,15 +35,25 @@ public class SeanMergeSort {
     }
   }
 
-  public void mergeSort(List<Integer> values) {
-    if (values.size() < 2) return;
-    int middle = values.size() / 2;
+  public void mergeSort(List<Integer> original) {
+    if (original.size() < 2) {
+      return;
+    }
+
+    int middle = original.size() / 2;
     List<Integer> left = new ArrayList<>();
     List<Integer> right = new ArrayList<>();
-    for (int x = 0; x < middle; x++) left.add(values.get(x));
-    for (int y = middle; y < values.size(); y++) right.add(values.get(y));
+
+    for (int x = 0; x < middle; x++) {
+      left.add(original.get(x));
+    }
+
+    for (int y = middle; y < original.size(); y++) {
+      right.add(original.get(y));
+    }
+
     this.mergeSort(left);
     this.mergeSort(right);
-    this.merge(left, right, values);
+    this.merge(left, right, original);
   }
 }

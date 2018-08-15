@@ -11,6 +11,7 @@ public class SeanBinaryTree<T extends Comparable<T>> {
 
   private DoubleLinkNode<T> root;
   private final Order order;
+  private int size = 0;
 
   enum Order {
     PRE_ORDER,
@@ -26,8 +27,13 @@ public class SeanBinaryTree<T extends Comparable<T>> {
     this.order = order;
   }
 
+  public int getSize() {
+    return size;
+  }
+
   public DoubleLinkNode<T> add(T data) {
     DoubleLinkNode<T> newNode = new DoubleLinkNode<>(data);
+    size++;
 
     if (root == null) {
       root = newNode;
@@ -79,6 +85,7 @@ public class SeanBinaryTree<T extends Comparable<T>> {
   }
 
   public DoubleLinkNode<T> delete(T data) {
+    size--;
     return delete(root, data);
   }
 
@@ -177,7 +184,7 @@ public class SeanBinaryTree<T extends Comparable<T>> {
     return validTree(this.root);
   }
 
-  private boolean validTree(DoubleLinkNode<T> root) {
+  public boolean validTree(DoubleLinkNode<T> root) {
     if (root == null) {
       return true;
     }
@@ -190,7 +197,7 @@ public class SeanBinaryTree<T extends Comparable<T>> {
         if (current.getLeft().getData().compareTo(current.getData()) >= 0) {
           System.out.println("current:");
           System.out.println(current);
-          System.out.println("one:");
+          System.out.println("left:");
           System.out.println(current.getLeft());
           return false;
         }
@@ -202,7 +209,7 @@ public class SeanBinaryTree<T extends Comparable<T>> {
         if (current.getRight().getData().compareTo(current.getData()) <= 0) {
           System.out.println("current:");
           System.out.println(current);
-          System.out.println("two: ");
+          System.out.println("right: ");
           System.out.println(current.getRight());
           return false;
         }

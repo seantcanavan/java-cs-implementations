@@ -1,6 +1,7 @@
 package seantcanavan;
 
 import org.junit.jupiter.api.Test;
+import seantcanavan.components.DoubleLinkNode;
 
 import java.util.LinkedList;
 import java.util.Random;
@@ -66,13 +67,13 @@ public class SeanBinaryTreeTest {
     SeanBinaryTree<String> bst = new SeanBinaryTree<>();
     LinkedList<String> insertedValues = new LinkedList<>();
 
-    for (int i = 0; i < 100; i++) {
+    for (int i = 0; i < 10000; i++) {
       String random = randomStringGenerator(subset, length);
       insertedValues.add(random);
       bst.add(random);
     }
 
-    for (int i = 0; i < 100; i++) {
+    for (int i = 0; i < 10000; i++) {
       if (randomOperation() == 0) {
         String next = randomStringGenerator(subset, length);
         insertedValues.add(next);
@@ -83,7 +84,34 @@ public class SeanBinaryTreeTest {
       }
     }
 
+    System.out.println(bst.getSize());
     assertThat(bst.validTree()).isTrue();
+  }
+
+  @Test
+  public void ValidTree_WithMultipleInvalidTrees_ShouldReturnAllInvalid() {
+    DoubleLinkNode<Integer> root = new DoubleLinkNode<>(50);
+
+    DoubleLinkNode<Integer> tier2_left = new DoubleLinkNode<>(25);
+    DoubleLinkNode<Integer> tier2_right = new DoubleLinkNode<>(75);
+
+    root.setLeft(tier2_left);
+    root.setRight(tier2_right);
+
+    DoubleLinkNode<Integer> tier3_1_left = new DoubleLinkNode<>(10);
+    DoubleLinkNode<Integer> tier3_1_right = new DoubleLinkNode<>(28);
+
+    DoubleLinkNode<Integer> tier3_2_left = new DoubleLinkNode<>(30);
+    DoubleLinkNode<Integer> tier3_2_right = new DoubleLinkNode<>(62);
+
+    tier2_left.setLeft(tier3_1_left);
+    tier2_left.setRight(tier3_1_right);
+
+    tier2_right.setLeft(tier3_2_left);
+    tier2_right.setRight(tier3_2_right);
+
+    SeanBinaryTree<Integer> sbst = new SeanBinaryTree<>();
+    assertThat(sbst.validTree(root)).isFalse();
   }
 
   private int randomOperation() {
